@@ -1,4 +1,40 @@
 const path = require('path');
+const webpack = require('webpack');
+
+const PRODUCTION = process.env.NODE_ENV === 'production';
+
+function getPlugins() {
+  let plugins = [];
+  if (PRODUCTION) {
+    plugins.push(new webpack.LoaderOptionsPlugin({
+      minimize: true,
+      debug: false
+    }));
+    plugins.push(new webpack.optimize.UglifyJsPlugin({
+      sourceMap: true,
+      beautify: false,
+      mangle: {
+        screw_ie8: true,
+        keep_fnames: true
+      },
+      compress: {
+        screw_ie8: true
+      },
+      comments: false
+    }));
+  }
+  return plugins;
+}
+
+function getDevServer() {
+  var devServer;
+  if (!PRODUCTION) {
+    devServer = {
+      contentBase: path.join(__dirname, 'example'),
+    };
+  }
+  return devServer;
+}
 
 export default () => ({
   entry: './src/index.js',
@@ -8,14 +44,6 @@ export default () => ({
     libraryTarget: 'umd',
     library: 'Auth0Analytics'
   },
-  // externals: {
-  //     'lodash': {
-  //         commonjs: 'lodash',
-  //         commonjs2: 'lodash',
-  //         amd: 'lodash',
-  //         root: '_'
-  //     }
-  // },
   module: {
     rules: [{
       test: /\.js$/,
@@ -23,7 +51,6 @@ export default () => ({
       loader: 'babel-loader'
     }]
   },
-  devServer: {
-    contentBase: path.join(__dirname, 'example'),
-  }
+  plugins: getPlugins(),
+  devServer: getDevServer()
 });
