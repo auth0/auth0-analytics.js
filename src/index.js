@@ -1,3 +1,5 @@
+/* global window, Auth0Lock */
+
 const facebook = require('./facebook');
 const google = require('./google');
 
@@ -20,31 +22,43 @@ function setUserId(userId) {
 
 function setupEvent(lock, name) {
   lock.on(name, function(payload) {
+    if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
+      setUserId(payload.idTokenPayload.sub);
+    }
     logEvent(name);
   });
 }
 
+// function setProfile(profile) {
+//   facebook.setProfile(profile);
+//   // Not implimented for google
+// }
 
-export function setAuthenticated(authResult) {
-  if (authResult && authResult.idTokenPayload && authResult.idTokenPayload.sub) {
-    setUserId(authResult.idTokenPayload.sub);
-    logEvent('authenticated');
+// export function setUserProperties(data) {
+//   throw new Error('Not implimented');
+// }
+
+function init(lock) {
+  if (window.auth0AnalyticsOptions) {
+    setOptions(window.auth0AnalyticsOptions);
   }
-}
 
-export function setProfile(profile) {
-  facebook.setProfile(profile);
-  // Not implimented for google
-}
-
-export function setUserProperties(data) {
-
-}
-
-export function initLock(lock, options) {
-  setOptions(options);
-  [
+  let eventNames = [
     'show',
     'hide',
-  ].forEach(setupEvent.bind(this, lock));
+    'authenticated'
+  ];
+
+  eventNames.forEach(setupEvent.bind(this, lock));
+}
+
+if (typeof Auth0Lock === 'function') {
+  let prototype = Auth0Lock.prototype;
+  Auth0Lock = function() {
+    let lock = prototype.constructor.apply(this, arguments);
+    init(lock);
+    return lock;
+  };
+
+  Auth0Lock.prototype = prototype;
 }

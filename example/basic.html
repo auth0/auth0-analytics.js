@@ -1,5 +1,11 @@
   <html>
     <head>
+      <script>
+        window.auth0AnalyticsOptions = {
+          enabled_facebook: true,
+          enabled_google: true
+        }
+      </script>
       <script src="https://cdn.auth0.com/js/lock/10.15/lock.min.js"></script>
       <script src="analytics.js"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -26,7 +32,6 @@
       </script>
       <script>
         var lock = new Auth0Lock('KekpkLNApjTN38mmTJu6XPxNqVB47DVG', 'ntotten-dev.auth0.com');
-        Auth0Analytics.initLock(lock);
 
         var btn_login = document.getElementById('btn-login');
 
@@ -36,13 +41,11 @@
 
 
         lock.on("authenticated", function(authResult) {
-          Auth0Analytics.setAuthenticated(authResult);
           lock.getProfile(authResult.idToken, function(error, profile) {
             if (error) {
               // Handle error
               return;
             }
-            Auth0Analytics.setProfile(profile);
             localStorage.setItem('id_token', authResult.idToken);
             console.log(profile);
           });

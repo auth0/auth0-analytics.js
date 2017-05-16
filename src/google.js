@@ -22,9 +22,6 @@ export function setUserId(userId) {
 }
 
 // export function setProfile(profile) {
-//   if (isGaLoaded()) {
-   
-//   }
 // }
 
 export function logEvent(name) {
