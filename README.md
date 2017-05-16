@@ -17,8 +17,8 @@ If you want to disable either the Facbeook or Google Analytics integrations you 
 ```html
 <script>
   window.auth0AnalyticsOptions = {
-    enabled_facebook: false,  // Defaults to true
-    enabled_google: false     // Defaults to true
+    enable_facebook: false,  // Defaults to true
+    enable_google: false     // Defaults to true
   }
 </script>
 ```

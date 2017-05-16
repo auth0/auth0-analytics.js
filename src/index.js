@@ -6,8 +6,8 @@ const google = require('./google');
 function setOptions(options) {
   options = options || {};
 
-  facebook.setStatus(options.facebook_enabled || true);
-  google.setStatus(options.google_enabled || true);
+  facebook.setStatus(options.enable_facebook || true);
+  google.setStatus(options.enable_google || true);
 }
 
 function logEvent(name, parameters) {
