@@ -6,7 +6,7 @@ This library adds Facebook and Google analytics integrations to Lock.
 
 ```html
 <script src="https://cdn.auth0.com/js/lock/10.x/lock.min.js"></script>
-<script src="https://cdn.auth0.com/js/analytics/1.x/analytics.min.js"></script>
+<script src="https://cdn.auth0.com/js/analytics/0.x/analytics.min.js"></script>
 ```
 
 ### Optional Configuration
