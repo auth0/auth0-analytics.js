@@ -40,7 +40,7 @@ export default () => ({
   entry: './src/index.js',
   output: {
     path: path.resolve(__dirname, './release'),
-    filename: 'analytics.js',
+    filename: PRODUCTION ? 'analytics.min.js' : 'analytics.js',
     libraryTarget: 'umd',
     library: 'Auth0Analytics'
   },
@@ -51,6 +51,7 @@ export default () => ({
       loader: 'babel-loader'
     }]
   },
+  devtool: 'source-map',
   plugins: getPlugins(),
   devServer: getDevServer()
 });
