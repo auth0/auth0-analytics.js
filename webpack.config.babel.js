@@ -39,7 +39,7 @@ function getDevServer() {
 export default () => ({
   entry: './src/index.js',
   output: {
-    path: path.resolve(__dirname, './dist'),
+    path: path.resolve(__dirname, './release'),
     filename: 'analytics.js',
     libraryTarget: 'umd',
     library: 'Auth0Analytics'
