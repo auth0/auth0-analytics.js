@@ -18,8 +18,21 @@ If you want to disable either the Facbeook or Google Analytics integrations you 
 ```html
 <script>
   window.auth0AnalyticsOptions = {
-    enable_facebook: false,  // Defaults to true
-    enable_google: false     // Defaults to true
+    'facebook-analytics': {
+      id: 'YOUR_FACEBOOK_APP_ID'
+    }
+  }
+</script>
+```
+
+If you already have the Facebook JS SDK on your page you can set the script to use that.
+
+```html
+<script>
+  window.auth0AnalyticsOptions = {
+    'facebook-analytics': {
+      preloaded: true
+    }
   }
 </script>
 ```

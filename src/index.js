@@ -1,31 +1,17 @@
 /* global window, Auth0Lock */
+import { initialize as TagManager } from '../node_modules/auth0-metrics-tag-manager/src';
+import { EVENT_NAMES } from './event-names';
 
-const facebook = require('./facebook');
-const google = require('./google');
 
-function setOptions(options) {
-  options = options || {};
-
-  facebook.setStatus(options.enable_facebook || true);
-  google.setStatus(options.enable_google || true);
-}
-
-function logEvent(name, parameters) {
-  facebook.logEvent(name, parameters);
-  google.logEvent(name, parameters);
-}
-
-function setUserId(userId) {
-  facebook.setUserId(userId);
-  google.setUserId(userId);
-}
+let analytics;
 
 function setupEvent(lock, name) {
   lock.on(name, function(payload) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
-      setUserId(payload.idTokenPayload.sub);
+      analytics.setUserId(payload.idTokenPayload.sub);
     }
-    logEvent(name);
+    let eventName = EVENT_NAMES[name] || name;
+    analytics.track(eventName);
   });
 }
 
@@ -39,9 +25,15 @@ function setupEvent(lock, name) {
 // }
 
 function init(lock) {
-  if (window.auth0AnalyticsOptions) {
-    setOptions(window.auth0AnalyticsOptions);
+  if (!window.auth0AnalyticsOptions) {
+    throw new Error('You must provide initialization options for Auth0 Analytics.');
   }
+
+  if (!window.auth0AnalyticsOptions.label) {
+    window.auth0AnalyticsOptions.label = 'Auth0 Analytics';
+  }
+
+  analytics = TagManager(window.auth0AnalyticsOptions);
 
   let eventNames = [
     'show',

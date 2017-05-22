@@ -3,7 +3,7 @@
       <script>
         window.auth0AnalyticsOptions = {
           'facebook-analytics': {
-            id: '586886298182936'
+            preloaded: true
           }
         }
       </script>
@@ -13,6 +13,24 @@
     </head>
     <body>
       <button type="submit" id="btn-login">Sign In</button>
+      <script>
+        window.fbAsyncInit = function() {
+          FB.init({
+            appId      : '586886298182936',
+            xfbml      : true,
+            version    : 'v2.8'
+          });
+          FB.AppEvents.logPageView();
+        };
+
+        (function(d, s, id){
+          var js, fjs = d.getElementsByTagName(s)[0];
+          if (d.getElementById(id)) {return;}
+          js = d.createElement(s); js.id = id;
+          js.src = "//connect.facebook.net/en_US/sdk.js";
+          fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+      </script>
       <script>
         var lock = new Auth0Lock('KekpkLNApjTN38mmTJu6XPxNqVB47DVG', 'ntotten-dev.auth0.com');
 
