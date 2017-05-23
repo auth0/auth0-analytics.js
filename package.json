@@ -29,6 +29,6 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "auth0-metrics-tag-manager": "^2.0.0-beta7"
+    "auth0-metrics-tag-manager": "^2.0.0-beta8"
   }
 }
