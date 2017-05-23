@@ -172,9 +172,9 @@ asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
 
-auth0-metrics-tag-manager@^2.0.0-beta8:
-  version "2.0.0-beta8"
-  resolved "https://registry.yarnpkg.com/auth0-metrics-tag-manager/-/auth0-metrics-tag-manager-2.0.0-beta8.tgz#3e1a76067d72435056fe94f851b4d25d5c6cff46"
+auth0-metrics-tag-manager@^2.0.0-beta13:
+  version "2.0.0-beta13"
+  resolved "https://registry.yarnpkg.com/auth0-metrics-tag-manager/-/auth0-metrics-tag-manager-2.0.0-beta13.tgz#ecc15426151a3d6973a260217898b94d2e1b44e4"
   dependencies:
     es6-promise "^4.1.0"
 
