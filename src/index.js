@@ -1,5 +1,5 @@
 /* global window, Auth0Lock */
-import TagManager from '../node_modules/auth0-metrics-tag-manager/src';
+import TagManager from 'auth0-metrics-tag-manager';
 
 const EVENT_NAMES = {
   'show': 'Auth0 Lock Show',
