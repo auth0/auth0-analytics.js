@@ -27,9 +27,6 @@ pipeline {
         }
 
         stage('Deploy') {
-            environment { 
-                
-            }
             steps {
                 sh 'tools/cdn.sh'
             }
