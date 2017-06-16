@@ -9,7 +9,13 @@ const EVENT_NAMES = {
 
 let analytics;
 
+function eventIsAvailable(lock, name) {
+  return lock.validEvents.indexOf(name) !== -1;
+}
+
 function setupEvent(lock, name) {
+  if (!eventIsAvailable(lock, name)) return;
+  
   lock.on(name, function(payload) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
       analytics.setUserId(payload.idTokenPayload.sub);
