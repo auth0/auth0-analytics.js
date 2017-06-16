@@ -52,6 +52,6 @@ export default () => ({
     }]
   },
   devtool: 'source-map',
-  plugins: getPlugins(),
+  //plugins: getPlugins(),
   devServer: getDevServer()
 });

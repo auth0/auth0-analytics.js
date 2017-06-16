@@ -1,6 +1,6 @@
 pipeline {
     agent any
-    tools { nodejs 'node-8.1.0' }
+    tools { nodejs 'node-v6.10.3' }
     stages {
         stage('Checkout') {
           steps {
@@ -28,11 +28,10 @@ pipeline {
 
         stage('Deploy') {
             environment { 
-                VERSION_NUMBER = '0.2'
+                CURRENT_VERSION=$(node -p "require('./package').version")
             }
             steps {
-                sh 'aws s3 sync release s3://assets.us.auth0.com/js/analytics/$VERSION_NUMBER --region us-west-1 --quiet --cache-control "max-age=86400" --acl public-read'
-                sh 'aws s3 sync release s3://assets.us.auth0.com/js/analytics/$VERSION_NUMBER.$BUILD_NUMBER --region us-west-1 --quiet --cache-control "max-age=86400" --acl public-read'
+                sh 'tools/cdn.sh'
             }
         }    
     }
@@ -52,7 +51,7 @@ pipeline {
 
       failure {
         slackSend channel: '#crew-solutions-build',
-                  color: 'error',
+                  color: 'danger',
                   message: "The pipeline ${currentBuild.fullDisplayName} has failed."
 
       }
