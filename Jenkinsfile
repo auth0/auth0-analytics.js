@@ -28,7 +28,7 @@ pipeline {
 
         stage('Deploy') {
             environment { 
-                CURRENT_VERSION=$(node -p "require('./package').version")
+                
             }
             steps {
                 sh 'tools/cdn.sh'
