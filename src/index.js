@@ -68,7 +68,8 @@ if (typeof Auth0Lock === 'function') {
 }
 
 module.exports = {
+  EVENT_NAMES,
   eventIsAvailable,
   setupEvent,
   init
-}
+};

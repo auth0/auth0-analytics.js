@@ -1,13 +1,41 @@
-import * as analytics from './index';
+import * as script from './index';
+jest.mock('auth0-tag-manager');
+
+const analytics = require('auth0-tag-manager').default;
+const check = (eventName) => script.eventIsAvailable(lock, eventName);
+const payload = {
+  idTokenPayload: {
+    sub: '5998fb300000000000000000'
+  }
+};
+const options = {
+  'facebook-analytics': {
+    id: '586886298182936'
+  }
+};
+window.Auth0Lock = jest.fn();
+window.auth0AnalyticsOptions = options;
 
 const lock = {
   on: jest.fn(),
-  validEvents: ['a', 'b', 'c', 'd']
+  validEvents: [ ...script.EVENT_NAMES, 'a', 'b', 'c', 'd']
 };
 
-const check = (eventName) => analytics.eventIsAvailable(lock, eventName);
+const errors = {
+  noOptions: 'You must provide initialization options for Auth0 Analytics.',
+  eventIsNotString: 'Lock event name must be string.'
+};
 
-test('eventIsAvailable must check if an event is available', () => {
+beforeAll(() => {
+  script.init(lock);
+});
+
+beforeEach(() => {
+  // Reset lock.on calls to avoid counting them in tests.
+  lock.on.mock.calls = [];
+});
+
+test('eventIsAvailable should check if an event is available', () => {
   // Expect to find
   expect(check('a')).toBe(true);
   expect(check('b')).toBe(true);
@@ -15,7 +43,7 @@ test('eventIsAvailable must check if an event is available', () => {
   expect(check('d')).toBe(true);
 });
 
-test('eventIsAvailable must check if an event is not available', () => {
+test('eventIsAvailable should check if an event is not available', () => {
   // Expect not to find
   expect(check('e')).toBe(false);
   expect(check('f')).toBe(false);
@@ -23,8 +51,8 @@ test('eventIsAvailable must check if an event is not available', () => {
   expect(check('h')).toBe(false);
 });
 
-test('eventIsAvailable must throw an error if event name is not a string', () => {
-  const error = 'Lock event name must be string.';
+test('eventIsAvailable should throw an error if event name is not a string', () => {
+  const error = errors.eventIsNotString;
   
   // With object
   expect(() => {
@@ -33,7 +61,7 @@ test('eventIsAvailable must throw an error if event name is not a string', () =>
 
   // With number
   expect(() => {
-    check(73);
+    check(7513);
   }).toThrow(error);
 
   // With array
@@ -42,25 +70,45 @@ test('eventIsAvailable must throw an error if event name is not a string', () =>
   }).toThrow(error);
 });
 
-test('setupEvent must subscribe to event if name is available', () => {
-  analytics.setupEvent(lock, 'a');
+test('setupEvent should subscribe to event if name is available', () => {
+  script.setupEvent(lock, 'a');
   expect(lock.on.mock.calls.length).toEqual(1);
 });
 
-test('setupEvent must not subscribe to event if name is not available', () => {
-  analytics.setupEvent(lock, 'a');
-  expect(lock.on.mock.calls.length).toEqual(2);
+test('setupEvent should not subscribe to event if name is not available', () => {
+  script.setupEvent(lock, 'a');
+  expect(lock.on.mock.calls.length).toEqual(1);
 });
 
-test('setupEvent must subscribe to event using the same name it received', () => {
+test('setupEvent should subscribe to event using the same name it received', () => {
   const eventName = lock.validEvents[0];
-  analytics.setupEvent(lock, eventName);
-  expect(lock.on.mock.calls[2][0]).toEqual(eventName);
+  script.setupEvent(lock, eventName);
+  expect(lock.on.mock.calls[0][0]).toEqual(eventName);
 });
 
-test('setupEvent must subscribe using a callback function', () => {
+test('setupEvent should subscribe using a callback function', () => {
   const eventName = lock.validEvents[0];
-  analytics.setupEvent(lock, eventName);
-  expect(typeof lock.on.mock.calls[3][1]).toEqual('function');
+  script.setupEvent(lock, eventName);
+  expect(typeof lock.on.mock.calls[0][1]).toEqual('function');
 });
+
+test('init should initialize analytics with options', () => {
+  expect(analytics).toBeCalledWith(options);
+});
+
+test('init should throw an error if there are no options set', () => {
+  expect(() => {
+    window.auth0AnalyticsOptions = null;
+    script.init(lock);
+    window.auth0AnalyticsOptions = options;
+  }).toThrow(errors.noOptions);
+});
+
+test('init should set default label if not provided', () => {
+  window.auth0AnalyticsOptions = options;
+  script.init(lock);
+  expect(window.auth0AnalyticsOptions.label).toEqual('Auth0 Analytics');
+});
+
+
 
