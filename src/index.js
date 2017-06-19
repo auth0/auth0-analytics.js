@@ -1,12 +1,6 @@
 /* global window, Auth0Lock */
 import TagManager from 'auth0-tag-manager';
 
-const EVENT_NAMES = {
-  'show': 'Auth0 Lock Show',
-  'hide': 'Auth0 Lock Hide',
-  'authenticated': 'Auth0 Lock Authenticated',
-};
-
 let analytics;
 
 function eventIsAvailable(lock, name) {
@@ -22,19 +16,10 @@ function setupEvent(lock, name) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
       analytics.setUserId(payload.idTokenPayload.sub);
     }
-    let eventName = EVENT_NAMES[name] || name;
+    let eventName = `auth0 lock ${name}`;
     analytics.track(eventName);
   });
 }
-
-// function setProfile(profile) {
-//   facebook.setProfile(profile);
-//   // Not implimented for google
-// }
-
-// export function setUserProperties(data) {
-//   throw new Error('Not implimented');
-// }
 
 function init(lock) {
   if (!window.auth0AnalyticsOptions) {
@@ -47,13 +32,10 @@ function init(lock) {
 
   analytics = TagManager(window.auth0AnalyticsOptions);
 
-  let eventNames = [
-    'show',
-    'hide',
-    'authenticated'
-  ];
-
-  eventNames.forEach(setupEvent.bind(this, lock));
+  lock.validEvents.forEach((name) => {
+    if (name === 'hash_parsed') return; // Not needed for analytics
+    setupEvent(lock, name);
+  });
 }
 
 if (typeof Auth0Lock === 'function') {
