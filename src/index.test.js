@@ -18,7 +18,7 @@ window.auth0AnalyticsOptions = options;
 
 const lock = {
   on: jest.fn(),
-  validEvents: [ ...script.EVENT_NAMES, 'a', 'b', 'c', 'd']
+  validEvents: ['a', 'b', 'c', 'd']
 };
 
 const errors = {
@@ -34,6 +34,10 @@ beforeEach(() => {
   // Reset lock.on calls to avoid counting them in tests.
   lock.on.mock.calls = [];
 });
+
+/**
+ * eventIsAvailable(lock, name) Tests
+ */
 
 test('eventIsAvailable should check if an event is available', () => {
   // Expect to find
@@ -70,6 +74,10 @@ test('eventIsAvailable should throw an error if event name is not a string', () 
   }).toThrow(error);
 });
 
+/**
+ * setupEvent(lock, name) Tests
+ */
+
 test('setupEvent should subscribe to event if name is available', () => {
   script.setupEvent(lock, 'a');
   expect(lock.on.mock.calls.length).toEqual(1);
@@ -92,6 +100,10 @@ test('setupEvent should subscribe using a callback function', () => {
   expect(typeof lock.on.mock.calls[0][1]).toEqual('function');
 });
 
+/**
+ * init(lock) Tests
+ */
+
 test('init should initialize analytics with options', () => {
   expect(analytics).toBeCalledWith(options);
 });
@@ -109,6 +121,3 @@ test('init should set default label if not provided', () => {
   script.init(lock);
   expect(window.auth0AnalyticsOptions.label).toEqual('Auth0 Analytics');
 });
-
-
-
