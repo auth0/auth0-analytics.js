@@ -10,6 +10,8 @@ const EVENT_NAMES = {
 let analytics;
 
 function eventIsAvailable(lock, name) {
+  if (typeof name !== 'string') throw new Error('Lock event name must be string.');
+  
   return lock.validEvents.indexOf(name) !== -1;
 }
 
@@ -63,4 +65,10 @@ if (typeof Auth0Lock === 'function') {
   };
 
   Auth0Lock.prototype = prototype;
+}
+
+module.exports = {
+  eventIsAvailable,
+  setupEvent,
+  init
 }
