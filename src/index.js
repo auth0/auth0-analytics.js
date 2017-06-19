@@ -3,21 +3,31 @@ import TagManager from 'auth0-tag-manager';
 
 let analytics;
 
+const IGNORED_EVENTS = [
+  'hash_parsed'
+];
+
+function eventShouldBeIgnored(name) {
+  if (typeof name !== 'string') throw new Error('Lock event name must be string.');
+  
+  return IGNORED_EVENTS.indexOf(name) !== -1;
+}
+
 function eventIsAvailable(lock, name) {
   if (typeof name !== 'string') throw new Error('Lock event name must be string.');
   
   return lock.validEvents.indexOf(name) !== -1;
 }
 
-function setupEvent(lock, name) {
+function setupEvent(lock, name, tracker = analytics) {
   if (!eventIsAvailable(lock, name)) return;
   
   lock.on(name, function(payload) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
-      analytics.setUserId(payload.idTokenPayload.sub);
+      tracker.setUserId(payload.idTokenPayload.sub);
     }
     let eventName = `auth0 lock ${name}`;
-    analytics.track(eventName);
+    tracker.track(eventName);
   });
 }
 
@@ -33,7 +43,7 @@ function init(lock) {
   analytics = TagManager(window.auth0AnalyticsOptions);
 
   lock.validEvents.forEach((name) => {
-    if (name === 'hash_parsed') return; // Not needed for analytics
+    if (eventShouldBeIgnored(name)) return; // Not needed for analytics
     setupEvent(lock, name);
   });
 }
@@ -50,6 +60,8 @@ if (typeof Auth0Lock === 'function') {
 }
 
 module.exports = {
+  IGNORED_EVENTS,
+  eventShouldBeIgnored,
   eventIsAvailable,
   setupEvent,
   init
