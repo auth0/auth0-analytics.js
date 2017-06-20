@@ -7,7 +7,8 @@
     "example": "example"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest --watch --verbose",
+    "coverage": "jest --coverage",
     "build": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server"
   },
@@ -24,6 +25,7 @@
     "babel-preset-env": "^1.5.2",
     "eslint": "^3.19.0",
     "eslint-loader": "^1.7.1",
+    "jest": "^20.0.4",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   },
