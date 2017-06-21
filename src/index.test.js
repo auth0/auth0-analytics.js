@@ -1,9 +1,9 @@
-import * as script from './index';
+window.Auth0Lock = jest.fn();
 
 jest.mock('auth0-tag-manager');
-
 let analytics = require('auth0-tag-manager').default;
 
+const script = require('./index');
 const check = (eventName) => script.eventIsAvailable(lock, eventName);
 const shouldIgnore = script.eventShouldBeIgnored
 
@@ -19,7 +19,6 @@ const options = {
   }
 };
 
-window.Auth0Lock = jest.fn();
 window.auth0AnalyticsOptions = options;
 
 const lock = {
