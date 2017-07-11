@@ -1,13 +1,13 @@
 {
   "name": "auth0-analytics",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "",
   "main": "src/index.js",
   "directories": {
     "example": "example"
   },
   "scripts": {
-    "test": "jest --watch --verbose",
+    "test": "jest --verbose",
     "coverage": "jest --coverage",
     "build": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server"
@@ -30,6 +30,6 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "auth0-tag-manager": "2.0.3"
+    "auth0-tag-manager": "2.0.5"
   }
 }
