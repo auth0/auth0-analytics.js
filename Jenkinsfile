@@ -14,11 +14,11 @@ pipeline {
             }
         }
 
-        // stage('Running tests') {
-        //   steps {
-        //     sh "npm run test:ci"
-        //   }
-        // }
+        stage('Running tests') {
+          steps {
+            sh 'yarn test'
+          }
+        }
 
         stage('Build') { 
             steps {
