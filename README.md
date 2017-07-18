@@ -1,3 +1,6 @@
+[![Build status][circleci-image]][circleci-url]
+[![License][license-image]][license-url]
+
 # Auth0 Analytics (Web)
 This library adds Facebook and Google analytics integrations to Lock. 
 
@@ -39,3 +42,9 @@ If you already have the Facebook JS SDK on your page you can set the script to u
   }
 </script>
 ```
+
+
+[circleci-image]: https://img.shields.io/circleci/project/github/auth0/auth0-analytics.js.svg?style=flat-square
+[circleci-url]: https://circleci.com/gh/auth0/auth0-analytics.js/tree/master
+[license-image]: http://img.shields.io/npm/l/auth0-lock.svg?style=flat-square
+[license-url]: #license
