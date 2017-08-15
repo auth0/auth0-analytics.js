@@ -32,6 +32,6 @@
   },
   "dependencies": {
     "auth0-tag-manager": "2.0.5",
-    "bluebird": "^3.5.0"
+    "babel-polyfill": "^6.23.0"
   }
 }
