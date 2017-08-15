@@ -1,5 +1,5 @@
 /* global window, Auth0Lock */
-import "babel-polyfill";
+import 'babel-polyfill';
 
 import TagManager from 'auth0-tag-manager';
 
