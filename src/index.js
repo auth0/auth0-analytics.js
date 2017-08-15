@@ -1,11 +1,12 @@
 /* global window, Auth0Lock */
-import TagManager from 'auth0-tag-manager';
 import Bluebird from 'bluebird';
 
-// Polyfill for IE11
+// Apply polyfill for IE11
 if (!window.Promise) {
   window.Promise = Bluebird;
 }
+
+import TagManager from 'auth0-tag-manager';
 
 let analytics;
 
