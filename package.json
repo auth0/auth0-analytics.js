@@ -9,6 +9,7 @@
   "scripts": {
     "test": "jest --verbose",
     "test:watch": "jest --watch",
+    "test:selenium": "mocha ./tests/index.js",
     "coverage": "jest --coverage",
     "build": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server"
@@ -24,9 +25,12 @@
     "babel-core": "^6.24.1",
     "babel-loader": "^7.0.0",
     "babel-preset-env": "^1.5.2",
+    "chai": "^4.1.1",
     "eslint": "^3.19.0",
     "eslint-loader": "^1.7.1",
     "jest": "^20.0.4",
+    "mocha": "^3.5.0",
+    "selenium-webdriver": "^3.5.0",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   },

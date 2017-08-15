@@ -15,13 +15,13 @@ const IGNORED_EVENTS = [
 ];
 
 function eventShouldBeIgnored(name) {
-  if (typeof name !== 'string') throw new Error('Lock event name must be string.');
+  if (typeof name !== 'string') throw new Error('Lock event name must be a string.');
   
   return IGNORED_EVENTS.indexOf(name) !== -1;
 }
 
 function eventIsAvailable(lock, name) {
-  if (typeof name !== 'string') throw new Error('Lock event name must be string.');
+  if (typeof name !== 'string') throw new Error('Lock event name must be a string.');
   
   return lock.validEvents.indexOf(name) !== -1;
 }
