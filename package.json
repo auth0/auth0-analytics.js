@@ -9,7 +9,7 @@
   "scripts": {
     "test": "jest --verbose",
     "test:watch": "jest --watch",
-    "test:selenium": "mocha ./tests/index.js",
+    "test:selenium": "sh './tests/scripts/pre_test.sh' && mocha ./tests/index.js && sh './tests/scripts/post_test.sh'",
     "coverage": "jest --coverage",
     "build": "NODE_ENV=production webpack -p",
     "start": "webpack-dev-server"
@@ -31,6 +31,7 @@
     "jest": "^20.0.4",
     "mocha": "^3.5.0",
     "selenium-webdriver": "^3.5.0",
+    "serve": "^6.0.6",
     "webpack": "^2.5.1",
     "webpack-dev-server": "^2.4.5"
   },
