@@ -31,6 +31,7 @@
     "webpack-dev-server": "^2.4.5"
   },
   "dependencies": {
-    "auth0-tag-manager": "2.0.5"
+    "auth0-tag-manager": "2.0.5",
+    "bluebird": "^3.5.0"
   }
 }
