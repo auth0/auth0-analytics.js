@@ -1,12 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script>
+        window.auth0AnalyticsOptions = {
+            'facebook-analytics': {
+                id: '586886298182936'
+            }
+        }
+    </script>
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="https://cdn.auth0.com/js/lock/10.18.0/lock.min.js"></script>
+    <script src="/release/analytics.min.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Auth0 Analytics</title>
 </head>
 <body>
-    <script src="/release/analytics.min.js"></script>
+<button type="submit" id="btn-login">Sign In</button>
+<ul id="events"></ul>
+<script>
+    var lock = new Auth0Lock('B-md5qIAOVqxwrmk9n-fHTe3ad5nnnrN', 'analytics-testing.auth0.com');
+
+    var btn_login = document.getElementById('btn-login');
+
+    btn_login.addEventListener('click', function() {
+        lock.show();
+    });
+
+    function registerEvent(e, name) {
+        console.log('e',e);
+        console.log('name',name);
+        $('#events').append('<li id="event_' + name.replace(/\s+/, '-') + '">' + name + '</li>')
+    }
+
+    function listenToEvent(name) {
+        lock.on(name, function (e) {
+            registerEvent(e, name)
+        });
+    }
+
+    lock.on("authenticated", function(authResult) {
+        lock.getProfile(authResult.idToken, function(error, profile) {
+            if (error) {
+                // Handle error
+                return;
+            }
+            localStorage.setItem('id_token', authResult.idToken);
+            console.log(profile);
+        });
+    });
+</script>
 </body>
 </html>
