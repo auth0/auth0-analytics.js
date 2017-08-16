@@ -41,13 +41,13 @@ pipeline {
       }
       
       success {
-        slackSend channel: '#crew-solutions-build',
+        slackSend channel: '#crew-apollo-build',
                   color: 'good',
                   message: "The pipeline ${currentBuild.fullDisplayName} completed successfully."
       }
 
       failure {
-        slackSend channel: '#crew-solutions-build',
+        slackSend channel: '#crew-apollo-build',
                   color: 'danger',
                   message: "The pipeline ${currentBuild.fullDisplayName} has failed."
 
