@@ -8,12 +8,7 @@ const { By, until } = webdriver;
 
 const SERVER_PORT = 1337;
 
-// listenToEvent('authenticated');
-// listenToEvent('signin submit');
-// listenToEvent('register submit');
-// listenToEvent('federated login');
-
-const driver = new webdriver.Builder()
+const bot = new webdriver.Builder()
 .withCapabilities(webdriver.Capabilities.chrome())
 .build();
 
@@ -29,16 +24,16 @@ test.describe('Analytics tests', function() {
   });
   
   after(() => {
+    bot.quit();
     this.server.stop();
-    driver.quit();
   });
   
   beforeEach(() => {
-    driver.get(`http://localhost:${SERVER_PORT}/`)
+    bot.get(`http://localhost:${SERVER_PORT}/`)
   });
 
   test.it('Analytics is loaded', (done) => {
-    driver.executeScript('return typeof Auth0Analytics')
+    bot.executeScript('return typeof Auth0Analytics')
     .then((returnValue) => {
       expect(returnValue).equal('object');
       done();
@@ -47,98 +42,130 @@ test.describe('Analytics tests', function() {
   
   test.it('Lock emits the "show" event', () => {
     
-    return driver.executeScript('listenToEvent("show")')
+    return bot.executeScript('listenToEvent("show")')
     .then(() => {
-      driver.findElement(By.id('btn-login')).click();
+      bot.findElement(By.id('btn-login')).click();
       
       expect(() => {
-        driver.findElement(By.id('event_show'));
+        bot.findElement(By.id('event_show'));
       }).to.not.throw();
     });
   });
 
   test.it('Lock emits the "forgot_password ready" event', () => {
     
-    return driver.executeScript('listenToEvent("forgot_password ready")')
+    return bot.executeScript('listenToEvent("forgot_password ready")')
     .then(() => {
-      driver.findElement(By.id('btn-login')).click();
+      bot.findElement(By.id('btn-login')).click();
       
-      driver.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
-      const forgotPasswordLink = driver.findElement(By.className('auth0-lock-alternative-link'));
+      bot.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
+      const forgotPasswordLink = bot.findElement(By.className('auth0-lock-alternative-link'));
       
-      driver.wait(until.elementIsVisible(forgotPasswordLink), 5000);
+      bot.wait(until.elementIsVisible(forgotPasswordLink), 5000);
       forgotPasswordLink.click();
       
       expect(() => {
-        driver.findElement(By.id('event_forgot_password-ready'));
+        bot.findElement(By.id('event_forgot_password-ready'));
       }).to.not.throw();
     });
   });
 
   test.it('Lock emits the "forgot_password submit" event', () => {
     
-    return driver.executeScript('listenToEvent("forgot_password submit")')
+    return bot.executeScript('listenToEvent("forgot_password submit")')
     .then(() => {
-      driver.findElement(By.id('btn-login')).click();
+      bot.findElement(By.id('btn-login')).click();
 
-      driver.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
-      const forgotPasswordLink = driver.findElement(By.className('auth0-lock-alternative-link'));
+      bot.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
+      const forgotPasswordLink = bot.findElement(By.className('auth0-lock-alternative-link'));
       
-      driver.wait(until.elementIsVisible(forgotPasswordLink), 5000);
+      bot.wait(until.elementIsVisible(forgotPasswordLink), 5000);
       forgotPasswordLink.click();
       
-      driver.wait(until.elementLocated(By.className('auth0-lock-input')), 5000);
-      const forgotPasswordInput = driver.findElement(By.className('auth0-lock-input'));
+      bot.wait(until.elementLocated(By.className('auth0-lock-input')), 5000);
+      const forgotPasswordInput = bot.findElement(By.className('auth0-lock-input'));
       
-      driver.wait(until.elementIsVisible(forgotPasswordInput), 5000);
+      bot.wait(until.elementIsVisible(forgotPasswordInput), 5000);
       
       forgotPasswordInput.sendKeys('fcorrea@sophilabs.com');
-      driver.findElement(By.className('auth0-lock-submit')).click();
+      bot.findElement(By.className('auth0-lock-submit')).click();
       
       expect(() => {
-        driver.findElement(By.id('event_forgot_password-submit'));
+        bot.findElement(By.id('event_forgot_password-submit'));
       }).to.not.throw();
     });
   });
 
   test.it.skip('Lock emits the "federated login" event', () => {
     
-    return driver.executeScript('listenToEvent("federated login")')
+    return bot.executeScript('listenToEvent("federated login")')
     .then(() => {
-      driver.findElement(By.id('btn-login')).click();
+      bot.findElement(By.id('btn-login')).click();
       
-      driver.wait(until.elementLocated(By.className('auth0-lock-social-button-text')), 5000);
-      const googleButton = driver.findElement(By.className('auth0-lock-social-button-text'));
+      bot.wait(until.elementLocated(By.className('auth0-lock-social-button-text')), 5000);
+      const googleButton = bot.findElement(By.className('auth0-lock-social-button-text'));
       
-      driver.wait(until.elementIsVisible(googleButton), 5000);
+      bot.wait(until.elementIsVisible(googleButton), 5000);
       googleButton.click();
-      driver.findElement(By.tagName('body')).sendKeys('Keys.ESCAPE');
+      bot.findElement(By.tagName('body')).sendKeys('Keys.ESCAPE');
       
       expect(() => {
-        driver.findElement(By.id('event_federated-login'));
+        bot.findElement(By.id('event_federated-login'));
       }).to.not.throw();
     });
   });
 
   test.it('Lock emits the "signup submit" event', () => {
-    
-    return driver.executeScript('listenToEvent("signup submit")')
+    return bot.executeScript('listenToEvent("signup submit")')
     .then(() => {
-      driver.findElement(By.id('btn-login')).click();
-      driver.wait(until.elementLocated(By.linkText('Sign Up'), 5000));
-      const signUpTab = driver.findElement(By.linkText('Sign Up'));
+      bot.findElement(By.id('btn-login')).click();
+      bot.wait(until.elementLocated(By.linkText('Sign Up'), 5000));
+      const signUpTab = bot.findElement(By.linkText('Sign Up'));
       
-      driver.wait(until.elementIsVisible(signUpTab), 5000);
+      bot.wait(until.elementIsVisible(signUpTab), 5000);
       signUpTab.click();
 
-      driver.findElement(By.css('input[type="email"]')).sendKeys('je08f3h@testing.auth0.com');
-      driver.findElement(By.css('input[type="password"]')).sendKeys('someRandomPassw0rd');
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
     
-      driver.findElement(By.className('auth0-lock-submit')).click();
+      bot.findElement(By.className('auth0-lock-submit')).click();
 
       expect(() => {
-        driver.findElement(By.id('event_signup-submit'));
+        bot.findElement(By.id('event_signup-submit'));
       }).to.not.throw();
     });
+  });
+
+  test.it('Lock emits the "signin submit" event', () => {
+    return bot.executeScript('listenToEvent("signin submit")')
+    .then(() => {
+      bot.findElement(By.id('btn-login')).click();
+      bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
+      
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
+    
+      bot.findElement(By.className('auth0-lock-submit')).click();
+
+      expect(() => {
+        bot.findElement(By.id('event_signin-submit'));
+      }).to.not.throw();
+    });
+  });
+
+  test.it('Lock emits the "authenticated" event', (done) => {
+    bot.findElement(By.id('btn-login')).click();
+    bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
+    
+    bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+    bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
+  
+    bot.findElement(By.className('auth0-lock-submit')).click();
+    bot.wait(until.elementLocated(By.id('event_authenticated')), 5000);
+    
+    expect(() => {
+      bot.findElement(By.id('event_authenticated'));
+      done();
+    }).to.not.throw();
   });
 });

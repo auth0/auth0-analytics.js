@@ -38,6 +38,10 @@
         });
     }
 
+    // Always listen to authenticated in order to avoid
+    // missing it when we need to test it.
+    listenToEvent('authenticated');
+
     lock.on("authenticated", function(authResult) {
         lock.getProfile(authResult.idToken, function(error, profile) {
             if (error) {
