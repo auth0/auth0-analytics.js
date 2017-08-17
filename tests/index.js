@@ -41,19 +41,31 @@ test.describe('Analytics tests', function() {
   });
   
   test.it('Lock emits the "show" event', () => {
-    
     return bot.executeScript('listenToEvent("show")')
     .then(() => {
       bot.findElement(By.id('btn-login')).click();
-      
+
       expect(() => {
         bot.findElement(By.id('event_show'));
       }).to.not.throw();
     });
   });
 
+  test.it('Lock emits the "hide" event', () => {
+    return bot.executeScript('listenToEvent("hide")')
+    .then(() => {
+      bot.findElement(By.id('btn-login')).click();
+      
+      bot.wait(until.elementLocated(By.linkText('Log In'), 5000));      
+      bot.findElement(By.className('auth0-lock-close-button')).click();
+
+      expect(() => {
+        bot.findElement(By.id('event_hide'));
+      }).to.not.throw();
+    });
+  });
+
   test.it('Lock emits the "forgot_password ready" event', () => {
-    
     return bot.executeScript('listenToEvent("forgot_password ready")')
     .then(() => {
       bot.findElement(By.id('btn-login')).click();
@@ -71,7 +83,6 @@ test.describe('Analytics tests', function() {
   });
 
   test.it('Lock emits the "forgot_password submit" event', () => {
-    
     return bot.executeScript('listenToEvent("forgot_password submit")')
     .then(() => {
       bot.findElement(By.id('btn-login')).click();
@@ -96,25 +107,6 @@ test.describe('Analytics tests', function() {
     });
   });
 
-  test.it.skip('Lock emits the "federated login" event', () => {
-    
-    return bot.executeScript('listenToEvent("federated login")')
-    .then(() => {
-      bot.findElement(By.id('btn-login')).click();
-      
-      bot.wait(until.elementLocated(By.className('auth0-lock-social-button-text')), 5000);
-      const googleButton = bot.findElement(By.className('auth0-lock-social-button-text'));
-      
-      bot.wait(until.elementIsVisible(googleButton), 5000);
-      googleButton.click();
-      bot.findElement(By.tagName('body')).sendKeys('Keys.ESCAPE');
-      
-      expect(() => {
-        bot.findElement(By.id('event_federated-login'));
-      }).to.not.throw();
-    });
-  });
-
   test.it('Lock emits the "signup submit" event', () => {
     return bot.executeScript('listenToEvent("signup submit")')
     .then(() => {
@@ -127,7 +119,6 @@ test.describe('Analytics tests', function() {
 
       bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
       bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
-    
       bot.findElement(By.className('auth0-lock-submit')).click();
 
       expect(() => {
@@ -149,6 +140,24 @@ test.describe('Analytics tests', function() {
 
       expect(() => {
         bot.findElement(By.id('event_signin-submit'));
+      }).to.not.throw();
+    });
+  });
+
+  test.it('Lock emits the "authorization_error" event', () => {
+    return bot.executeScript('listenToEvent("authorization_error")')
+    .then(() => {
+      bot.findElement(By.id('btn-login')).click();
+      bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
+      
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="password"]')).sendKeys('Inc0rr3ctP4a55w0rd!');
+      bot.findElement(By.className('auth0-lock-submit')).click();
+      
+      bot.wait(until.elementLocated(By.className('auth0-global-message-error')), 5000);
+      
+      expect(() => {
+        bot.findElement(By.id('event_authorization_error'));
       }).to.not.throw();
     });
   });
