@@ -1,10 +1,5 @@
 /* global window, Auth0Lock */
-import Bluebird from 'bluebird';
-
-// Apply polyfill for IE11
-if (!window.Promise) {
-  window.Promise = Bluebird;
-}
+import 'babel-polyfill';
 
 import TagManager from 'auth0-tag-manager';
 
