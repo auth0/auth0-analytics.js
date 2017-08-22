@@ -32,6 +32,16 @@ function setupEvent(lock, name, tracker = analytics) {
   lock.on(name, function(payload) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
       tracker.setUserId(payload.idTokenPayload.sub);
+      
+      lock.getProfile(payload.idToken, function(error, profile) {
+        if (error) { return; }
+        
+        const { connection } = profile;
+        
+        if (connection !== 'Username-And-Password-Authentication') {
+          tracker.track('federated login', connection);
+        }
+      });
     }
     let eventName = `auth0 lock ${name}`;
     tracker.track(eventName);
