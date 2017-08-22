@@ -6,7 +6,8 @@ import TagManager from 'auth0-tag-manager';
 let analytics;
 
 const IGNORED_EVENTS = [
-  'hash_parsed'
+  'hash_parsed',
+  'federated login'
 ];
 
 function eventShouldBeIgnored(name) {
