@@ -7,6 +7,9 @@ let analytics;
 
 const IGNORED_EVENTS = [
   'hash_parsed',
+  
+  // Ignore 'federated login' since we're 
+  // tracking it in a different moment.
   'federated login'
 ];
 
@@ -29,14 +32,10 @@ function setupEvent(lock, name, tracker = analytics) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
       tracker.setUserId(payload.idTokenPayload.sub);
       
-      lock.getProfile(payload.idToken, function(error, profile) {
+      lock.getProfile(payload.idToken, (error, { connection }) => {
         if (error) { return; }
         
-        const { connection } = profile;
-        
-        if (connection !== 'Username-And-Password-Authentication') {
-          tracker.track('federated login', connection);
-        }
+        tracker.track('federated login', connection);
       });
     }
     let eventName = `auth0 lock ${name}`;

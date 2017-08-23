@@ -5,7 +5,7 @@ let analytics = require('auth0-tag-manager').default;
 
 const script = require('./index');
 const check = (eventName) => script.eventIsAvailable(lock, eventName);
-const shouldIgnore = script.eventShouldBeIgnored
+const shouldIgnore = script.eventShouldBeIgnored;
 
 const payload = {
   idTokenPayload: {
