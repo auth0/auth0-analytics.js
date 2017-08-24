@@ -1,38 +1,37 @@
 /* global window, Auth0Lock */
-import TagManager from 'auth0-tag-manager';
+import 'babel-polyfill';
 
-const EVENT_NAMES = {
-  'show': 'Auth0 Lock Show',
-  'hide': 'Auth0 Lock Hide',
-  'authenticated': 'Auth0 Lock Authenticated',
-};
+import TagManager from 'auth0-tag-manager';
 
 let analytics;
 
+const IGNORED_EVENTS = [
+  'hash_parsed'  
+];
+
+function eventShouldBeIgnored(name) {
+  if (typeof name !== 'string') throw new Error('Lock event name must be a string.');
+  
+  return IGNORED_EVENTS.indexOf(name) !== -1;
+}
+
 function eventIsAvailable(lock, name) {
+  if (typeof name !== 'string') throw new Error('Lock event name must be a string.');
+  
   return lock.validEvents.indexOf(name) !== -1;
 }
 
-function setupEvent(lock, name) {
+function setupEvent(lock, name, tracker = analytics) {
   if (!eventIsAvailable(lock, name)) return;
   
   lock.on(name, function(payload) {
     if (name === 'authenticated' && payload && payload.idTokenPayload && payload.idTokenPayload.sub) {
-      analytics.setUserId(payload.idTokenPayload.sub);
+      tracker.setUserId(payload.idTokenPayload.sub);
     }
-    let eventName = EVENT_NAMES[name] || name;
-    analytics.track(eventName);
+    let eventName = `auth0 lock ${name}`;
+    tracker.track(eventName);
   });
 }
-
-// function setProfile(profile) {
-//   facebook.setProfile(profile);
-//   // Not implimented for google
-// }
-
-// export function setUserProperties(data) {
-//   throw new Error('Not implimented');
-// }
 
 function init(lock) {
   if (!window.auth0AnalyticsOptions) {
@@ -45,13 +44,10 @@ function init(lock) {
 
   analytics = TagManager(window.auth0AnalyticsOptions);
 
-  let eventNames = [
-    'show',
-    'hide',
-    'authenticated'
-  ];
-
-  eventNames.forEach(setupEvent.bind(this, lock));
+  lock.validEvents.forEach((name) => {
+    if (eventShouldBeIgnored(name)) return; // Not needed for analytics
+    setupEvent(lock, name);
+  });
 }
 
 if (typeof Auth0Lock === 'function') {
@@ -64,3 +60,11 @@ if (typeof Auth0Lock === 'function') {
 
   Auth0Lock.prototype = prototype;
 }
+
+module.exports = {
+  IGNORED_EVENTS,
+  eventShouldBeIgnored,
+  eventIsAvailable,
+  setupEvent,
+  init
+};
