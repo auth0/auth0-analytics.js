@@ -6,7 +6,7 @@ import TagManager from 'auth0-tag-manager';
 let analytics;
 
 const IGNORED_EVENTS = [
-  'hash_parsed'
+  'hash_parsed'  
 ];
 
 function eventShouldBeIgnored(name) {

@@ -5,7 +5,7 @@ let analytics = require('auth0-tag-manager').default;
 
 const script = require('./index');
 const check = (eventName) => script.eventIsAvailable(lock, eventName);
-const shouldIgnore = script.eventShouldBeIgnored
+const shouldIgnore = script.eventShouldBeIgnored;
 
 const payload = {
   idTokenPayload: {
@@ -23,12 +23,13 @@ window.auth0AnalyticsOptions = options;
 
 const lock = {
   on: jest.fn(),
+  getProfile: jest.fn(),
   validEvents: ['a', 'b', 'c', 'd', 'authenticated']
 };
 
 const errors = {
   noOptions: 'You must provide initialization options for Auth0 Analytics.',
-  eventIsNotString: 'Lock event name must be string.'
+  eventIsNotString: 'Lock event name must be a string.'
 };
 
 beforeAll(() => {
