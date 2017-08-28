@@ -14,7 +14,9 @@ const bot = new webdriver.Builder()
 .withCapabilities({
   browserName: 'Chrome 60',
   platform: 'macOS Sierra',
-  name: 'Analytics test'
+  name: 'Analytics test',
+  username: process.env.SAUCE_USERNAME,
+  accessKey: process.env.SAUCE_ACCESS_KEY
 })
 .build();
 
