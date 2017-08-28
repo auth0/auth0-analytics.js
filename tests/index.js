@@ -12,7 +12,7 @@ const SAUCE = 'http://ondemand.saucelabs.com:80/wd/hub';
 const bot = new webdriver.Builder()
 .usingServer(SAUCE)
 .withCapabilities({
-  browserName: 'Chrome 60',
+  browserName: 'Chrome',
   platform: 'macOS Sierra',
   name: 'Analytics test',
   username: process.env.SAUCE_USERNAME,
