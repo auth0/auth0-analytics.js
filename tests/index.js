@@ -7,9 +7,15 @@ const serve = require('serve');
 const { By, until } = webdriver;
 
 const SERVER_PORT = 1337;
+const SAUCE = 'http://ondemand.saucelabs.com:80/wd/hub';
 
 const bot = new webdriver.Builder()
-.withCapabilities(webdriver.Capabilities.chrome())
+.usingServer(SAUCE)
+.withCapabilities({
+  browserName: 'Chrome 60',
+  platform: 'macOS Sierra',
+  name: 'Analytics test'
+})
 .build();
 
 test.describe('Analytics tests', function() {
