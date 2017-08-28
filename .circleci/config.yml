@@ -9,13 +9,27 @@ jobs:
       - image: circleci/node:6
     steps:
       - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "package.json" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+      - run: yarn install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+          
       - run: wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
       - run: tar -xzf sc-latest-linux.tar.gz
-      - run: npm install
   test:
     docker:
       - image: circleci/node:6
     steps:
+      - run: yarn test
       - run: 
           command: cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready
           background: true
