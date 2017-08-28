@@ -26,9 +26,10 @@ jobs:
       - run: wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
       - run: tar -xzf sc-latest-linux.tar.gz
       - run: yarn test
-      - run: bash -e "cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready &; export SC_PID=$!" 
-      - run: echo "SC_PID = $SC_PID"
+      - run: 
+        command: cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready
+        background: true
       # Wait for tunnel to be ready
       - run: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run: npm run test:selenium
-      - run: kill $SC_PID
+      - run: pkill -SIGQUIT sc
