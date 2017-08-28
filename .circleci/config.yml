@@ -32,4 +32,4 @@ jobs:
       # Wait for tunnel to be ready
       - run: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run: npm run test:selenium
-      - run: pkill -SIGQUIT sc
+      - run: pkill -SIGINT sc
