@@ -22,7 +22,7 @@ jobs:
           paths:
             - node_modules
           key: v1-dependencies-{{ checksum "package.json" }}
-          
+
       - run: wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
       - run: tar -xzf sc-latest-linux.tar.gz
   test:
@@ -36,5 +36,5 @@ jobs:
       # Wait for tunnel to be ready
       - run: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run: npm run test:selenium
-  post: 
-    - run: killall --wait sc  # wait for Sauce Connect to close the tunnel
+      - run: killall --wait sc
+
