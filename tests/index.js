@@ -13,7 +13,7 @@ const bot = new webdriver.Builder()
 .usingServer(SAUCE)
 .withCapabilities({
   browserName: 'Chrome',
-  platform: 'macOS Sierra',
+  platform: 'Windows 10',
   name: 'Analytics test',
   username: process.env.SAUCE_USERNAME,
   accessKey: process.env.SAUCE_ACCESS_KEY
