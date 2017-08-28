@@ -25,10 +25,6 @@ jobs:
 
       - run: wget https://saucelabs.com/downloads/sc-latest-linux.tar.gz
       - run: tar -xzf sc-latest-linux.tar.gz
-  test:
-    docker:
-      - image: circleci/node:6
-    steps:
       - run: yarn test
       - run: 
           command: cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready
@@ -37,4 +33,3 @@ jobs:
       - run: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run: npm run test:selenium
       - run: killall --wait sc
-
