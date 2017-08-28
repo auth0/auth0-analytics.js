@@ -30,7 +30,7 @@ jobs:
           command: cd sc-*-linux && ./bin/sc --user $SAUCE_USERNAME --api-key $SAUCE_ACCESS_KEY --readyfile ~/sauce_is_ready
           background: true
       - run: export SC_PID=$!
-      - run: echo 'SC_PID = $SC_PID'
+      - run: echo "SC_PID = $SC_PID"
       # Wait for tunnel to be ready
       - run: while [ ! -e ~/sauce_is_ready ]; do sleep 1; done
       - run: npm run test:selenium
