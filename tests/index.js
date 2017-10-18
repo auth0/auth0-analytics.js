@@ -7,9 +7,17 @@ const serve = require('serve');
 const { By, until } = webdriver;
 
 const SERVER_PORT = 1337;
+const SAUCE = 'http://ondemand.saucelabs.com:80/wd/hub';
 
 const bot = new webdriver.Builder()
-.withCapabilities(webdriver.Capabilities.chrome())
+.usingServer(SAUCE)
+.withCapabilities({
+  browserName: 'Chrome',
+  platform: 'Windows 10',
+  name: 'Analytics test',
+  username: process.env.SAUCE_USERNAME,
+  accessKey: process.env.SAUCE_ACCESS_KEY
+})
 .build();
 
 test.describe('Analytics tests', function() {
@@ -98,7 +106,7 @@ test.describe('Analytics tests', function() {
       
       bot.wait(until.elementIsVisible(forgotPasswordInput), 5000);
       
-      forgotPasswordInput.sendKeys('fcorrea@sophilabs.com');
+      forgotPasswordInput.sendKeys('analytics@testing.auth0.com');
       bot.findElement(By.className('auth0-lock-submit')).click();
       
       expect(() => {
