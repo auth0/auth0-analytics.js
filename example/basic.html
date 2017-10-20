@@ -7,7 +7,7 @@
           }
         }
       </script>
-      <script src="https://cdn.auth0.com/js/lock/10.15/lock.min.js"></script>
+      <script src="https://cdn.auth0.com/js/lock/11.0.0-beta.1/lock.min.js"></script>
       <script src="analytics.js"></script>
       <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     </head>
@@ -24,7 +24,7 @@
 
 
         lock.on("authenticated", function(authResult) {
-          lock.getProfile(authResult.idToken, function(error, profile) {
+          lock.getUserInfo(authResult.idToken, function(error, profile) {
             if (error) {
               // Handle error
               return;
