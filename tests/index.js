@@ -27,7 +27,8 @@ test.describe('Analytics tests', function() {
     this.server = serve(__dirname + '/app', {
       port: SERVER_PORT,
       silent: true,
-      clipless: true
+      clipless: true,
+      ssl: true
     });
   });
   
@@ -37,7 +38,7 @@ test.describe('Analytics tests', function() {
   });
   
   beforeEach(() => {
-    bot.get(`http://localhost:${SERVER_PORT}/`)
+    bot.get(`https://localhost:${SERVER_PORT}/`)
   });
 
   test.it('Analytics is loaded', (done) => {
@@ -64,15 +65,16 @@ test.describe('Analytics tests', function() {
     .then(() => {
       bot.findElement(By.id('btn-login')).click();
       
-      bot.wait(until.elementLocated(By.linkText('Log In'), 5000));      
+      bot.wait(until.elementLocated(By.className('auth0-lock-close-button'), 5000));      
+      bot.sleep(1.5);
       bot.findElement(By.className('auth0-lock-close-button')).click();
-
+      
       expect(() => {
         bot.findElement(By.id('event_hide'));
       }).to.not.throw();
     });
   });
-
+  
   test.it('Lock emits the "forgot_password ready" event', () => {
     return bot.executeScript('listenToEvent("forgot_password ready")')
     .then(() => {
@@ -81,7 +83,9 @@ test.describe('Analytics tests', function() {
       bot.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
       const forgotPasswordLink = bot.findElement(By.className('auth0-lock-alternative-link'));
       
+      bot.sleep(1);
       bot.wait(until.elementIsVisible(forgotPasswordLink), 5000);
+      bot.sleep(2.5);
       forgotPasswordLink.click();
       
       expect(() => {
@@ -89,16 +93,17 @@ test.describe('Analytics tests', function() {
       }).to.not.throw();
     });
   });
-
+  
   test.it('Lock emits the "forgot_password submit" event', () => {
     return bot.executeScript('listenToEvent("forgot_password submit")')
     .then(() => {
       bot.findElement(By.id('btn-login')).click();
-
+      
       bot.wait(until.elementLocated(By.className('auth0-lock-alternative-link')), 5000);
       const forgotPasswordLink = bot.findElement(By.className('auth0-lock-alternative-link'));
       
       bot.wait(until.elementIsVisible(forgotPasswordLink), 5000);
+      bot.sleep(1);
       forgotPasswordLink.click();
       
       bot.wait(until.elementLocated(By.className('auth0-lock-input')), 5000);
@@ -106,7 +111,7 @@ test.describe('Analytics tests', function() {
       
       bot.wait(until.elementIsVisible(forgotPasswordInput), 5000);
       
-      forgotPasswordInput.sendKeys('analytics@testing.auth0.com');
+      forgotPasswordInput.sendKeys('analytics2@testing.auth0.com');
       bot.findElement(By.className('auth0-lock-submit')).click();
       
       expect(() => {
@@ -125,7 +130,7 @@ test.describe('Analytics tests', function() {
       bot.wait(until.elementIsVisible(signUpTab), 5000);
       signUpTab.click();
 
-      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics2@testing.auth0.com');
       bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
       bot.findElement(By.className('auth0-lock-submit')).click();
 
@@ -141,7 +146,7 @@ test.describe('Analytics tests', function() {
       bot.findElement(By.id('btn-login')).click();
       bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
       
-      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics2@testing.auth0.com');
       bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
     
       bot.findElement(By.className('auth0-lock-submit')).click();
@@ -158,7 +163,7 @@ test.describe('Analytics tests', function() {
       bot.findElement(By.id('btn-login')).click();
       bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
       
-      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+      bot.findElement(By.css('input[type="email"]')).sendKeys('analytics2@testing.auth0.com');
       bot.findElement(By.css('input[type="password"]')).sendKeys('Inc0rr3ctP4a55w0rd!');
       bot.findElement(By.className('auth0-lock-submit')).click();
       
@@ -174,7 +179,7 @@ test.describe('Analytics tests', function() {
     bot.findElement(By.id('btn-login')).click();
     bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
     
-    bot.findElement(By.css('input[type="email"]')).sendKeys('analytics@testing.auth0.com');
+    bot.findElement(By.css('input[type="email"]')).sendKeys('analytics2@testing.auth0.com');
     bot.findElement(By.css('input[type="password"]')).sendKeys('Passw0rdLess!');
   
     bot.findElement(By.className('auth0-lock-submit')).click();
