@@ -23,7 +23,7 @@ window.auth0AnalyticsOptions = options;
 
 const lock = {
   on: jest.fn(),
-  getProfile: jest.fn(),
+  getUserInfo: jest.fn(),
   validEvents: ['a', 'b', 'c', 'd', 'authenticated']
 };
 
