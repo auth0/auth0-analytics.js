@@ -10,14 +10,15 @@ const SERVER_PORT = 1337;
 const SAUCE = 'http://ondemand.saucelabs.com:80/wd/hub';
 
 const bot = new webdriver.Builder()
-  .usingServer(SAUCE)
-  .withCapabilities({
-    browserName: 'Chrome',
-    platform: 'Windows 10',
-    name: 'Analytics test',
-    username: process.env.SAUCE_USERNAME,
-    accessKey: process.env.SAUCE_ACCESS_KEY
-  })
+  .withCapabilities(webdriver.Capabilities.chrome())
+  // .usingServer(SAUCE)
+  // .withCapabilities({
+  //   browserName: 'Chrome',
+  //   platform: 'Windows 10',
+  //   name: 'Analytics test',
+  //   username: process.env.SAUCE_USERNAME,
+  //   accessKey: process.env.SAUCE_ACCESS_KEY
+  // })
   .build();
 
 const signUpTabXPath =
@@ -180,29 +181,29 @@ test.describe('Analytics tests', function() {
   });
 
   // TODO: Investigate about authorization_error not emitting in Lock 11
-  // test.it('Lock emits the "authorization_error" event', () => {
-  //   return bot
-  //     .executeScript('listenToEvent("authorization_error")')
-  //     .then(() => {
-  //       bot.findElement(By.id('btn-login')).click();
-  //       bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
+  test.it('Lock emits the "authorization_error" event', () => {
+    return bot
+      .executeScript('listenToEvent("authorization_error")')
+      .then(() => {
+        bot.findElement(By.id('btn-login')).click();
+        bot.wait(until.elementLocated(By.linkText('Log In'), 5000));
 
-  //       bot.findElement(By.css('input[type="email"]')).sendKeys(testEmail);
-  //       bot
-  //         .findElement(By.css('input[type="password"]'))
-  //         .sendKeys('Inc0rr3ctP4a55w0rd!');
-  //       bot.findElement(By.className('auth0-lock-submit')).click();
+        bot.findElement(By.css('input[type="email"]')).sendKeys(testEmail);
+        bot
+          .findElement(By.css('input[type="password"]'))
+          .sendKeys('Inc0rr3ctP4a55w0rd!');
+        bot.findElement(By.className('auth0-lock-submit')).click();
 
-  //       bot.wait(
-  //         until.elementLocated(By.className('auth0-global-message-error')),
-  //         5000
-  //       );
+        bot.wait(
+          until.elementLocated(By.className('auth0-global-message-error')),
+          5000
+        );
 
-  //       expect(() => {
-  //         bot.findElement(By.id('event_authorization_error'));
-  //       }).to.not.throw();
-  //     });
-  // });
+        expect(() => {
+          bot.findElement(By.id('event_authorization_error'));
+        }).to.not.throw();
+      });
+  });
 
   test.it('Lock emits the "authenticated" event', done => {
     bot.findElement(By.id('btn-login')).click();
