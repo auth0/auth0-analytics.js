@@ -9,7 +9,7 @@
         }
     </script>
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="https://cdn.auth0.com/js/lock/10.18.0/lock.min.js"></script>
+    <script src="https://cdn.auth0.com/js/lock/11.0.0/lock.min.js"></script>
     <script src="/release/analytics.min.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>Auth0 Analytics</title>
@@ -17,6 +17,7 @@
 <body>
 <button type="submit" id="btn-login">Sign In</button>
 <ul id="events"></ul>
+<ul id="listening_to"></ul>
 <script>
     var lock = new Auth0Lock('B-md5qIAOVqxwrmk9n-fHTe3ad5nnnrN', 'analytics-testing.auth0.com');
 
@@ -31,6 +32,7 @@
     }
 
     function listenToEvent(name) {
+        $('#listening_to').append('<li>' + name + '</li>')
         lock.on(name, function (e) {
             registerEvent(e, name)
         });
@@ -41,7 +43,7 @@
     listenToEvent('authenticated');
 
     lock.on("authenticated", function(authResult) {
-        lock.getProfile(authResult.idToken, function(error, profile) {
+        lock.getUserInfo(authResult.idToken, function(error, profile) {
             if (error) {
                 // Handle error
                 return;
