@@ -1,6 +1,11 @@
 pipeline {
-    agent any
-    tools { nodejs 'node-v6.10.3' }
+    agent {
+      label 'crew-apollo' // Run only on agents under this label
+    }
+    tools {
+      // Make sure Jenkins supports the version below. If not, contact #crew-bronn
+      nodejs 'node-v6.10.3'
+    }
     stages {
         stage('Checkout') {
           steps {
@@ -10,7 +15,9 @@ pipeline {
 
         stage('Installing dependencies') {
             steps {
-                sh 'yarn'
+                sshagent(['auth0extensions-ssh-key']) {
+                    sh 'yarn'
+                }
             }
         }
 
@@ -20,7 +27,7 @@ pipeline {
           }
         }
 
-        stage('Build') { 
+        stage('Build') {
             steps {
                 sh 'npm run build'
             }
@@ -30,16 +37,16 @@ pipeline {
             steps {
                 sh 'tools/cdn.sh'
             }
-        }    
+        }
     }
 
     post {
       // Always runs. And it runs before any of the other post conditions.
       always {
-        // Let's wipe out the workspace before we finish!        
+        // Let's wipe out the workspace before we finish!
         deleteDir()
       }
-      
+
       success {
         slackSend channel: '#crew-apollo-build',
                   color: 'good',
@@ -59,7 +66,7 @@ pipeline {
       // For example, we'd like to make sure we only keep 10 builds at a time, so
       // we don't fill up our storage!
       buildDiscarder(logRotator(numToKeepStr:'10'))
-      
+
       // And we'd really like to be sure that this build doesn't hang forever, so
       // let's time it out after an hour.
       timeout(time: 30, unit: 'MINUTES')
