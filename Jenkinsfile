@@ -1,6 +1,11 @@
 pipeline {
-    agent any
-    tools { nodejs 'node-v6.10.3' }
+    agent {
+      label 'crew-apollo' // Run only on agents under this label
+    }
+    tools {
+      // Make sure Jenkins supports the version below. If not, contact #crew-bronn
+      nodejs 'node-v6.10.3'
+    }
     stages {
         stage('Checkout') {
           steps {
@@ -10,7 +15,9 @@ pipeline {
 
         stage('Installing dependencies') {
             steps {
-                sh 'yarn'
+                sshagent(['auth0extensions-ssh-key']) {
+                    sh 'yarn'
+                }
             }
         }
 
