@@ -16,7 +16,7 @@ This library adds Facebook and Google analytics integrations to Lock.
 
 ### Optional Configuration
 
-If you want to disable either the Facbeook or Google Analytics integrations you can do so with the optional configuration.
+If you want to enable either the Facebook or Google Analytics integrations you can do so with the optional configuration.
 
 > Note: This must be placed on the page before the analytics script is loaded.
 
