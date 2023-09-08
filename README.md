@@ -3,7 +3,7 @@
 
 # Auth0 Analytics (Web)
 
-This library adds Facebook and Google analytics integrations to Lock.
+This library adds Facebook and Google Analytics integrations to Lock.
 
 ## Usage
 
